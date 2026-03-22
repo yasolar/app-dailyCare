@@ -80,7 +80,7 @@ export default function DailyReportScreen() {
   const generateReport = () => {
     const lines: string[] = [];
     lines.push(`Data: ${date}`);
-    lines.push(`Cuidadora: ${settings.caregiverName || '___'}`);
+    lines.push(`Cuidador(a): ${settings.caregiverName || '___'}`);
     lines.push('');
     questions.forEach((q) => {
       const ans = answers[q.id] ?? '';
@@ -156,7 +156,7 @@ export default function DailyReportScreen() {
           </View>
           <View style={styles.infoDivider} />
           <View style={styles.infoRow}>
-            <Text style={styles.infoLabel}>👩 Cuidadora</Text>
+            <Text style={styles.infoLabel}>👩 Cuidador(a)</Text>
             {editingName ? (
               <View style={styles.nameEditRow}>
                 <TextInput
