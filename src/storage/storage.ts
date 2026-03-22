@@ -89,7 +89,7 @@ export async function saveSettings(settings: Settings): Promise<void> {
 function getDefaultQuestions(): Question[] {
   return [
     { id: '1', label: 'Água (quantos copos de 200ml)', answerType: 'numero', defaultAnswer: '0', order: 1 },
-    { id: '2', label: 'Canabidiol (2 gotas)', answerType: 'sim_nao', defaultAnswer: '', order: 2 },
+    { id: '2', label: 'Remédio (2 gotas)', answerType: 'sim_nao', defaultAnswer: '', order: 2 },
     { id: '3', label: 'Café da Manhã', answerType: 'selecao_alimentos', defaultAnswer: '', order: 3, optionsListId: 'lista_cafe' },
     { id: '4', label: 'Medicação Manhã (20 gotas de memantina e vitamina C)', answerType: 'sim_nao', defaultAnswer: '', order: 4 },
     { id: '5', label: 'Caminhada (horário e quanto tempo caminhou)', answerType: 'texto', defaultAnswer: '', order: 5 },
@@ -99,7 +99,7 @@ function getDefaultQuestions(): Question[] {
     { id: '9', label: 'Sono da tarde (horário)', answerType: 'horario_intervalo', defaultAnswer: '', order: 9 },
     { id: '10', label: 'Lanche', answerType: 'selecao_alimentos', defaultAnswer: '', order: 10, optionsListId: 'lista_lanche' },
     { id: '19', label: 'Jantar', answerType: 'selecao_alimentos', defaultAnswer: '', order: 11, optionsListId: 'lista_jantar' },
-    { id: '11', label: 'Medicação da tarde 3 gotas de canabidiol (17h)', answerType: 'sim_nao', defaultAnswer: '', order: 12 },
+    { id: '11', label: 'Medicação da tarde 3 gotas (17h)', answerType: 'sim_nao', defaultAnswer: '', order: 12 },
     { id: '12', label: 'Nutren (preparo e horário)', answerType: 'texto', defaultAnswer: '', order: 13 },
     { id: '13', label: 'Escovação de Dentes e Retirada de Próteses', answerType: 'sim_nao', defaultAnswer: '', order: 14 },
     { id: '14', label: 'Evacuou?', answerType: 'sim_nao', defaultAnswer: '', order: 15 },

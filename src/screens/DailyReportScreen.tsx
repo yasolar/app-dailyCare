@@ -11,7 +11,7 @@ import {
   Modal,
   Platform,
 } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useFocusEffect } from '@react-navigation/native';
 import { Question, Settings, OpcoesList } from '../types';
 import { loadQuestions, loadSettings, saveSettings, loadListasOpcoes } from '../storage/storage';
@@ -38,6 +38,7 @@ function todayStr() {
 }
 
 export default function DailyReportScreen() {
+  const insets = useSafeAreaInsets();
   const [questions, setQuestions] = useState<Question[]>([]);
   const [answers, setAnswers] = useState<Record<string, string>>({});
   const [settings, setSettings] = useState<Settings>({ caregiverName: '' });
@@ -230,7 +231,7 @@ export default function DailyReportScreen() {
 
       {/* Report Modal */}
       <Modal visible={showReport} animationType="slide">
-        <SafeAreaView style={styles.modalSafe}>
+        <View style={[styles.modalSafe, { paddingTop: insets.top, paddingBottom: insets.bottom }]}>
           <View style={styles.modalHeader}>
             <Text style={styles.modalTitle}>Relatório do dia</Text>
             <TouchableOpacity onPress={() => setShowReport(false)} style={styles.modalClose}>
@@ -249,7 +250,7 @@ export default function DailyReportScreen() {
               <Text style={styles.shareBtnText}>📤 Compartilhar / WhatsApp</Text>
             </TouchableOpacity>
           </View>
-        </SafeAreaView>
+        </View>
       </Modal>
     </SafeAreaView>
   );
