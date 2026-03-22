@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useState } from 'react';
 import {
   View,
   Text,
@@ -11,7 +11,7 @@ import {
   Platform,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useFocusEffect, useNavigation, useRoute, RouteProp } from '@react-navigation/native';
+import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { OpcoesList } from '../types';
 import { loadListasOpcoes, saveListasOpcoes } from '../storage/storage';
@@ -21,10 +21,10 @@ type Nav = NativeStackNavigationProp<QuestionsStackParamList, 'EditarLista'>;
 type Route = RouteProp<QuestionsStackParamList, 'EditarLista'>;
 
 const COLORS = {
-  primary: '#3B82F6',
+  primary: '#2D6A4F',
   danger: '#EF4444',
-  border: '#E5E7EB',
-  bg: '#F3F4F6',
+  border: '#C7E8D1',
+  bg: '#EAF7EE',
   text: '#111827',
   muted: '#6B7280',
   white: '#FFFFFF',

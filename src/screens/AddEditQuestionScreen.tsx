@@ -21,14 +21,14 @@ type Nav = NativeStackNavigationProp<QuestionsStackParamList, 'AddEditQuestion'>
 type Route = RouteProp<QuestionsStackParamList, 'AddEditQuestion'>;
 
 const COLORS = {
-  primary: '#3B82F6',
-  border: '#D1D5DB',
-  bg: '#F9FAFB',
+  primary: '#2D6A4F',
+  border: '#C7E8D1',
+  bg: '#EAF7EE',
   text: '#111827',
   muted: '#6B7280',
   white: '#FFFFFF',
-  selected: '#EFF6FF',
-  selectedBorder: '#3B82F6',
+  selected: '#D8F3DC',
+  selectedBorder: '#2D6A4F',
 };
 
 const ANSWER_TYPES: AnswerType[] = [

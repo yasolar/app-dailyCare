@@ -17,10 +17,10 @@ import { QuestionsStackParamList } from '../../App';
 type Nav = NativeStackNavigationProp<QuestionsStackParamList, 'ListasOpcoes'>;
 
 const COLORS = {
-  primary: '#3B82F6',
+  primary: '#2D6A4F',
   danger: '#EF4444',
-  border: '#E5E7EB',
-  bg: '#F3F4F6',
+  border: '#C7E8D1',
+  bg: '#EAF7EE',
   text: '#111827',
   muted: '#6B7280',
   white: '#FFFFFF',

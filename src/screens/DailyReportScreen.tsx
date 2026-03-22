@@ -18,15 +18,15 @@ import { loadQuestions, loadSettings, saveSettings, loadListasOpcoes } from '../
 import AnswerInput from '../components/AnswerInput';
 
 const COLORS = {
-  primary: '#3B82F6',
-  green: '#22C55E',
-  border: '#E5E7EB',
-  bg: '#F3F4F6',
+  primary: '#2D6A4F',
+  green: '#52B788',
+  border: '#C7E8D1',
+  bg: '#EAF7EE',
   text: '#111827',
   muted: '#6B7280',
   white: '#FFFFFF',
   card: '#FFFFFF',
-  header: '#1E40AF',
+  header: '#1B4332',
 };
 
 function todayStr() {

@@ -17,11 +17,11 @@ interface Props {
 }
 
 const COLORS = {
-  primary: '#3B82F6',
-  sim: '#22C55E',
+  primary: '#2D6A4F',
+  sim: '#52B788',
   nao: '#EF4444',
-  border: '#D1D5DB',
-  bg: '#F9FAFB',
+  border: '#C7E8D1',
+  bg: '#EAF7EE',
   text: '#111827',
   muted: '#6B7280',
   white: '#FFFFFF',
@@ -389,7 +389,7 @@ const styles = StyleSheet.create({
   },
   alimentoChipSelected: {
     borderColor: COLORS.primary,
-    backgroundColor: '#EFF6FF',
+    backgroundColor: '#D8F3DC',
   },
   alimentoChipText: { fontSize: 14, fontWeight: '600', color: COLORS.muted },
   alimentoChipTextSelected: { color: COLORS.primary },
