@@ -85,8 +85,7 @@ function NumeroInput({ value, onChange }: { value: string; onChange: (v: string)
 function parseTime(s: string): { h: number; m: number } {
   const match = s.match(/^(\d{1,2}):(\d{2})$/);
   if (match) return { h: parseInt(match[1], 10), m: parseInt(match[2], 10) };
-  const now = new Date();
-  return { h: now.getHours(), m: now.getMinutes() };
+  return { h: 0, m: 0 };
 }
 
 function formatTime(h: number, m: number): string {
@@ -146,11 +145,11 @@ function TimePicker({
               <Text style={styles.timeSep}>:</Text>
               <View style={styles.timeColumn}>
                 <Text style={styles.timeColLabel}>Min</Text>
-                <TouchableOpacity onPress={() => setTempM((tempM + 5) % 60)} style={styles.timeArrow}>
+                <TouchableOpacity onPress={() => setTempM((tempM + 1) % 60)} style={styles.timeArrow}>
                   <Text style={styles.timeArrowText}>▲</Text>
                 </TouchableOpacity>
                 <Text style={styles.timeValue}>{String(tempM).padStart(2, '0')}</Text>
-                <TouchableOpacity onPress={() => setTempM((tempM - 5 + 60) % 60)} style={styles.timeArrow}>
+                <TouchableOpacity onPress={() => setTempM((tempM - 1 + 60) % 60)} style={styles.timeArrow}>
                   <Text style={styles.timeArrowText}>▼</Text>
                 </TouchableOpacity>
               </View>
