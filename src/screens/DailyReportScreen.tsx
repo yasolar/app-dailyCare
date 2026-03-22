@@ -231,7 +231,7 @@ export default function DailyReportScreen() {
 
       {/* Report Modal */}
       <Modal visible={showReport} animationType="slide">
-        <View style={[styles.modalSafe, { paddingTop: insets.top, paddingBottom: insets.bottom }]}>
+        <View style={[styles.modalSafe, { paddingTop: insets.top }]}>
           <View style={styles.modalHeader}>
             <Text style={styles.modalTitle}>Relatório do dia</Text>
             <TouchableOpacity onPress={() => setShowReport(false)} style={styles.modalClose}>
@@ -349,7 +349,7 @@ const styles = StyleSheet.create({
   reportScroll: { flex: 1 },
   reportText: { fontSize: 14, color: COLORS.text, lineHeight: 22, fontFamily: Platform.OS === 'ios' ? 'Menlo' : 'monospace' },
 
-  modalFooter: { padding: 16, borderTopWidth: 1, borderTopColor: COLORS.border },
+  modalFooter: { padding: 16, paddingBottom: 24, borderTopWidth: 1, borderTopColor: COLORS.border },
   shareBtn: {
     backgroundColor: '#25D366',
     borderRadius: 14,
