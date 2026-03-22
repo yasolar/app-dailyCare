@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "app_dailyCare",
-    "slug": "app_dailyCare",
+    "slug": "app-daily-care",
     "version": "1.0.0",
     "sdkVersion": "54.0.0",
     "orientation": "portrait",
@@ -16,6 +16,7 @@
       "supportsTablet": true
     },
     "android": {
+      "package": "com.cenourites.appdailycare",
       "newArchEnabled": false,
       "adaptiveIcon": {
         "backgroundColor": "#2D6A4F",
@@ -27,6 +28,12 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "extra": {
+      "eas": {
+        "projectId": "c60a3cf7-820a-4ea7-a1ca-4ecf4c2b3f20"
+      }
+    },
+    "owner": "cenouritess-organization"
   }
 }
