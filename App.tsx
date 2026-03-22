@@ -10,6 +10,7 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import SplashScreen from './src/screens/SplashScreen';
 import WelcomeScreen from './src/screens/WelcomeScreen';
 import DailyReportScreen from './src/screens/DailyReportScreen';
+import ReportViewScreen from './src/screens/ReportViewScreen';
 import QuestionsScreen from './src/screens/QuestionsScreen';
 import AddEditQuestionScreen from './src/screens/AddEditQuestionScreen';
 import ListasOpcoesScreen from './src/screens/ListasOpcoesScreen';
@@ -17,6 +18,11 @@ import EditarListaScreen from './src/screens/EditarListaScreen';
 import { Question, OpcoesList } from './src/types';
 
 // ── Types ─────────────────────────────────────────────────────────────────────
+
+export type DailyReportStackParamList = {
+  DailyReportForm: undefined;
+  ReportView: { reportText: string };
+};
 
 export type QuestionsStackParamList = {
   QuestionsList: undefined;
@@ -33,8 +39,18 @@ type RootStackParamList = {
 // ── Stacks ────────────────────────────────────────────────────────────────────
 
 const RootStack = createNativeStackNavigator<RootStackParamList>();
+const DRStack = createNativeStackNavigator<DailyReportStackParamList>();
 const QStack = createNativeStackNavigator<QuestionsStackParamList>();
 const Tab = createBottomTabNavigator();
+
+function DailyReportStack() {
+  return (
+    <DRStack.Navigator screenOptions={{ headerShown: false }}>
+      <DRStack.Screen name="DailyReportForm" component={DailyReportScreen} />
+      <DRStack.Screen name="ReportView" component={ReportViewScreen} />
+    </DRStack.Navigator>
+  );
+}
 
 function QuestionsStack() {
   return (
@@ -78,7 +94,7 @@ function MainTabs() {
     >
       <Tab.Screen
         name="Relatório"
-        component={DailyReportScreen}
+        component={DailyReportStack}
         options={{ tabBarIcon: ({ color }) => <Text style={{ fontSize: 20, color }}>📋</Text> }}
       />
       <Tab.Screen

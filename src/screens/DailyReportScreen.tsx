@@ -5,17 +5,18 @@ import {
   ScrollView,
   TouchableOpacity,
   StyleSheet,
-  Share,
   TextInput,
   Alert,
-  Modal,
-  Platform,
 } from 'react-native';
-import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { useFocusEffect } from '@react-navigation/native';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { DailyReportStackParamList } from '../../App';
 import { Question, Settings, OpcoesList } from '../types';
 import { loadQuestions, loadSettings, saveSettings, loadListasOpcoes } from '../storage/storage';
 import AnswerInput from '../components/AnswerInput';
+
+type Props = NativeStackScreenProps<DailyReportStackParamList, 'DailyReportForm'>;
 
 const COLORS = {
   primary: '#2D6A4F',
@@ -37,8 +38,7 @@ function todayStr() {
   return `${day}/${month}/${year}`;
 }
 
-export default function DailyReportScreen() {
-  const insets = useSafeAreaInsets();
+export default function DailyReportScreen({ navigation }: Props) {
   const [questions, setQuestions] = useState<Question[]>([]);
   const [answers, setAnswers] = useState<Record<string, string>>({});
   const [settings, setSettings] = useState<Settings>({ caregiverName: '' });
@@ -48,8 +48,6 @@ export default function DailyReportScreen() {
   const [tempDate, setTempDate] = useState('');
   const [editingName, setEditingName] = useState(false);
   const [tempName, setTempName] = useState('');
-  const [reportText, setReportText] = useState('');
-  const [showReport, setShowReport] = useState(false);
 
   useFocusEffect(
     useCallback(() => {
@@ -93,16 +91,7 @@ export default function DailyReportScreen() {
 
   const handleGenerateAndShare = () => {
     const text = generateReport();
-    setReportText(text);
-    setShowReport(true);
-  };
-
-  const shareViaWhatsApp = async () => {
-    try {
-      await Share.share({ message: reportText });
-    } catch {
-      Alert.alert('Erro', 'Não foi possível compartilhar.');
-    }
+    navigation.navigate('ReportView', { reportText: text });
   };
 
   const clearForm = () => {
@@ -229,29 +218,6 @@ export default function DailyReportScreen() {
         )}
       </ScrollView>
 
-      {/* Report Modal */}
-      <Modal visible={showReport} animationType="slide">
-        <View style={[styles.modalSafe, { paddingTop: insets.top }]}>
-          <View style={styles.modalHeader}>
-            <Text style={styles.modalTitle}>Relatório do dia</Text>
-            <TouchableOpacity onPress={() => setShowReport(false)} style={styles.modalClose}>
-              <Text style={styles.modalCloseText}>✕</Text>
-            </TouchableOpacity>
-          </View>
-
-          <ScrollView style={styles.reportScroll} contentContainerStyle={{ padding: 20 }}>
-            <Text style={styles.reportText} selectable>
-              {reportText}
-            </Text>
-          </ScrollView>
-
-          <View style={styles.modalFooter}>
-            <TouchableOpacity style={styles.shareBtn} onPress={shareViaWhatsApp} activeOpacity={0.85}>
-              <Text style={styles.shareBtnText}>📤 Compartilhar / WhatsApp</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-      </Modal>
     </SafeAreaView>
   );
 }
@@ -332,29 +298,4 @@ const styles = StyleSheet.create({
   },
   generateBtnText: { color: COLORS.white, fontSize: 18, fontWeight: '700' },
 
-  // Report modal
-  modalSafe: { flex: 1, backgroundColor: COLORS.white },
-  modalHeader: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    padding: 16,
-    borderBottomWidth: 1,
-    borderBottomColor: COLORS.border,
-  },
-  modalTitle: { fontSize: 18, fontWeight: '700', color: COLORS.text },
-  modalClose: { padding: 6 },
-  modalCloseText: { fontSize: 20, color: COLORS.muted },
-
-  reportScroll: { flex: 1 },
-  reportText: { fontSize: 14, color: COLORS.text, lineHeight: 22, fontFamily: Platform.OS === 'ios' ? 'Menlo' : 'monospace' },
-
-  modalFooter: { padding: 16, paddingBottom: 24, borderTopWidth: 1, borderTopColor: COLORS.border },
-  shareBtn: {
-    backgroundColor: '#25D366',
-    borderRadius: 14,
-    paddingVertical: 16,
-    alignItems: 'center',
-  },
-  shareBtnText: { color: COLORS.white, fontSize: 17, fontWeight: '700' },
 });
