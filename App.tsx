@@ -58,7 +58,7 @@ function QuestionsStack() {
       <QStack.Screen
         name="QuestionsList"
         component={QuestionsScreen}
-        options={{ title: 'Perguntas' }}
+        options={{ title: 'Cadastro de perguntas' }}
       />
       <QStack.Screen
         name="AddEditQuestion"
@@ -98,7 +98,7 @@ function MainTabs() {
         options={{ tabBarIcon: ({ color, size }) => <Feather name="clipboard" size={size} color={color} /> }}
       />
       <Tab.Screen
-        name="Perguntas"
+        name="Cadastro"
         component={QuestionsStack}
         options={{ tabBarIcon: ({ color, size }) => <Feather name="settings" size={size} color={color} /> }}
       />

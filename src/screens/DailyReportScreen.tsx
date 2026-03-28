@@ -275,7 +275,7 @@ export default function DailyReportScreen({ navigation }: Props) {
               </Text>
               <TouchableOpacity
                 style={styles.emptyBtn}
-                onPress={() => tabNavigation.navigate('Perguntas')}
+                onPress={() => tabNavigation.navigate('Cadastro')}
                 activeOpacity={0.85}
               >
                 <Feather name="plus" size={18} color={C.white} style={{ marginRight: 8 }} />
