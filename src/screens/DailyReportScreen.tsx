@@ -141,7 +141,6 @@ export default function DailyReportScreen({ navigation }: Props) {
           <Logo />
           <View style={styles.heroTitles}>
             <Text style={styles.heroSuper}>DAILY CARE</Text>
-            <Text style={styles.heroTitle}>Daily Health Report</Text>
           </View>
         </View>
 
@@ -359,17 +358,10 @@ const styles = StyleSheet.create({
   },
   heroTitles: { flex: 1 },
   heroSuper: {
-    fontSize: 11,
-    fontWeight: '700',
-    color: 'rgba(255,255,255,0.65)',
-    letterSpacing: 2,
-    marginBottom: 2,
-  },
-  heroTitle: {
-    fontSize: 22,
+    fontSize: 26,
     fontWeight: '800',
     color: C.white,
-    letterSpacing: 0.2,
+    letterSpacing: 1.5,
   },
 
   heroField: {
@@ -380,7 +372,7 @@ const styles = StyleSheet.create({
     borderColor: C.fieldBorder,
     borderRadius: 14,
     paddingHorizontal: 16,
-    paddingVertical: 14,
+    paddingVertical: 20,
     marginBottom: 10,
     gap: 10,
   },
