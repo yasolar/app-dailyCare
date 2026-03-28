@@ -8,6 +8,7 @@ import {
   Alert,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { Feather } from '@expo/vector-icons';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { OpcoesList } from '../types';
@@ -79,9 +80,9 @@ export default function ListasOpcoesScreen() {
                 onPress={() => deletarLista(item.id, item.name)}
                 style={styles.deleteBtn}
               >
-                <Text style={styles.deleteBtnText}>🗑</Text>
+                <Feather name="trash-2" size={20} color={COLORS.danger} />
               </TouchableOpacity>
-              <Text style={styles.arrow}>›</Text>
+              <Feather name="chevron-right" size={24} color={COLORS.muted} />
             </View>
           </TouchableOpacity>
         )}
@@ -91,7 +92,7 @@ export default function ListasOpcoesScreen() {
         onPress={() => navigation.navigate('EditarLista', { lista: null })}
         activeOpacity={0.85}
       >
-        <Text style={styles.fabText}>+</Text>
+        <Feather name="plus" size={28} color="#fff" />
       </TouchableOpacity>
     </SafeAreaView>
   );
@@ -106,7 +107,7 @@ const styles = StyleSheet.create({
   card: {
     backgroundColor: COLORS.card,
     borderRadius: 12,
-    padding: 16,
+    padding: 20,
     flexDirection: 'row',
     alignItems: 'center',
     elevation: 1,
@@ -115,12 +116,10 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
   },
   cardInfo: { flex: 1 },
-  cardName: { fontSize: 16, fontWeight: '700', color: COLORS.text },
-  cardCount: { fontSize: 13, color: COLORS.muted, marginTop: 2 },
+  cardName: { fontSize: 18, fontWeight: '700', color: COLORS.text },
+  cardCount: { fontSize: 15, color: COLORS.muted, marginTop: 3 },
   cardActions: { flexDirection: 'row', alignItems: 'center', gap: 8 },
-  deleteBtn: { padding: 6 },
-  deleteBtnText: { fontSize: 18 },
-  arrow: { fontSize: 24, color: COLORS.muted, fontWeight: '300' },
+  deleteBtn: { padding: 10 },
 
   fab: {
     position: 'absolute',
@@ -137,5 +136,4 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.4,
     shadowRadius: 8,
   },
-  fabText: { color: COLORS.white, fontSize: 32, lineHeight: 36 },
 });

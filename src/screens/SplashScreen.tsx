@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import { View, Text, StyleSheet, Animated, Dimensions } from 'react-native';
+import { Feather } from '@expo/vector-icons';
 
 const { width } = Dimensions.get('window');
 const CIRCLE = width * 0.52;
@@ -39,8 +40,7 @@ export default function SplashScreen({ onFinish }: Props) {
           <View style={styles.ringInner}>
             {/* Círculo principal */}
             <View style={styles.circle}>
-              <Text style={styles.leaf}>🌿</Text>
-              <Text style={styles.heart}>♥</Text>
+              <Feather name="heart" size={CIRCLE * 0.42} color="#fff" />
             </View>
           </View>
         </View>
@@ -113,18 +113,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     position: 'relative',
-  },
-
-  leaf: {
-    fontSize: CIRCLE * 0.44,
-    lineHeight: CIRCLE * 0.52,
-  },
-  heart: {
-    position: 'absolute',
-    bottom: CIRCLE * 0.14,
-    right: CIRCLE * 0.14,
-    fontSize: CIRCLE * 0.18,
-    color: '#FFB3C1',
   },
 
   appName: {

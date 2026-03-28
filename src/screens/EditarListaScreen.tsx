@@ -11,6 +11,7 @@ import {
   Platform,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { Feather } from '@expo/vector-icons';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { OpcoesList } from '../types';
@@ -111,7 +112,7 @@ export default function EditarListaScreen() {
             <View style={styles.card}>
               <Text style={styles.cardText}>{item}</Text>
               <TouchableOpacity onPress={() => removerItem(item)} style={styles.removeBtn}>
-                <Text style={styles.removeBtnText}>✕</Text>
+                <Feather name="x" size={18} color={COLORS.muted} />
               </TouchableOpacity>
             </View>
           )}
@@ -133,7 +134,7 @@ export default function EditarListaScreen() {
             disabled={!novoItem.trim()}
             activeOpacity={0.8}
           >
-            <Text style={styles.addBtnText}>+</Text>
+            <Feather name="plus" size={22} color="#fff" />
           </TouchableOpacity>
         </View>
 
@@ -194,7 +195,6 @@ const styles = StyleSheet.create({
   },
   cardText: { fontSize: 15, fontWeight: '500', color: COLORS.text },
   removeBtn: { padding: 4 },
-  removeBtnText: { fontSize: 16, color: COLORS.muted, fontWeight: '600' },
 
   addRow: {
     flexDirection: 'row',
@@ -224,7 +224,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   addBtnDisabled: { opacity: 0.4 },
-  addBtnText: { color: COLORS.white, fontSize: 24, fontWeight: '700', lineHeight: 28 },
 
   footer: {
     padding: 16,

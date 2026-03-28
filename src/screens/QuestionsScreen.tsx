@@ -10,6 +10,7 @@ import {
   GestureResponderEvent,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { Feather } from '@expo/vector-icons';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { Question } from '../types';
@@ -30,13 +31,13 @@ const COLORS = {
 };
 
 const TYPE_ICONS: Record<string, string> = {
-  sim_nao: '✓✗',
-  numero: '123',
-  texto: 'abc',
-  texto_longo: '¶',
-  horario: '⏰',
-  horario_intervalo: '⏱',
-  selecao_alimentos: '🍽',
+  sim_nao: 'check-circle',
+  numero: 'hash',
+  texto: 'type',
+  texto_longo: 'align-left',
+  horario: 'clock',
+  horario_intervalo: 'clock',
+  selecao_alimentos: 'list',
 };
 
 export default function QuestionsScreen() {
@@ -162,8 +163,11 @@ export default function QuestionsScreen() {
         onPress={() => navigation.navigate('ListasOpcoes')}
         activeOpacity={0.8}
       >
-        <Text style={styles.bannerText}>📋 Gerenciar listas de opções</Text>
-        <Text style={styles.bannerArrow}>›</Text>
+        <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
+          <Feather name="list" size={18} color={COLORS.primary} />
+          <Text style={styles.bannerText}>Gerenciar listas de opções</Text>
+        </View>
+        <Feather name="chevron-right" size={22} color={COLORS.primary} />
       </TouchableOpacity>
 
       <View
@@ -199,16 +203,18 @@ export default function QuestionsScreen() {
             >
               {/* Drag handle — outside the card, left side */}
               <View style={styles.dragHandle} {...dragHandleProps(index)}>
-                <Text style={[styles.dragHandleIcon, draggingIndex === index && styles.dragHandleIconActive]}>
-                  ⠿
-                </Text>
+                <Feather
+                  name="more-vertical"
+                  size={20}
+                  color={draggingIndex === index ? COLORS.primary : '#C4C9D4'}
+                />
               </View>
 
               {/* Card */}
               <View style={[styles.card, draggingIndex === index && styles.cardDimmed]}>
                 <View style={styles.cardLeft}>
                   <View style={styles.typeBadge}>
-                    <Text style={styles.typeBadgeText}>{TYPE_ICONS[item.answerType]}</Text>
+                    <Feather name={TYPE_ICONS[item.answerType] as any} size={18} color={COLORS.primary} />
                   </View>
                   <View style={styles.cardInfo}>
                     <Text style={styles.cardLabel} numberOfLines={2}>{item.label}</Text>
@@ -222,10 +228,10 @@ export default function QuestionsScreen() {
                     onPress={() => navigation.navigate('AddEditQuestion', { question: item })}
                     style={styles.actionBtn}
                   >
-                    <Text style={styles.actionBtnText}>✏️</Text>
+                    <Feather name="edit-2" size={18} color={COLORS.muted} />
                   </TouchableOpacity>
                   <TouchableOpacity onPress={() => deleteQuestion(item.id)} style={styles.actionBtn}>
-                    <Text style={styles.actionBtnText}>🗑</Text>
+                    <Feather name="trash-2" size={18} color={COLORS.danger} />
                   </TouchableOpacity>
                 </View>
               </View>
@@ -240,12 +246,12 @@ export default function QuestionsScreen() {
             style={[styles.floatingRow, { top: dragAnimY }]}
           >
             <View style={styles.dragHandle}>
-              <Text style={[styles.dragHandleIcon, styles.dragHandleIconActive]}>⠿</Text>
+              <Feather name="more-vertical" size={20} color={COLORS.primary} />
             </View>
             <View style={[styles.card, styles.cardFloating]}>
               <View style={styles.cardLeft}>
                 <View style={styles.typeBadge}>
-                  <Text style={styles.typeBadgeText}>{TYPE_ICONS[draggingQuestion.answerType]}</Text>
+                  <Feather name={TYPE_ICONS[draggingQuestion.answerType] as any} size={18} color={COLORS.primary} />
                 </View>
                 <View style={styles.cardInfo}>
                   <Text style={styles.cardLabel} numberOfLines={2}>{draggingQuestion.label}</Text>
@@ -261,7 +267,7 @@ export default function QuestionsScreen() {
         onPress={() => navigation.navigate('AddEditQuestion', { question: null })}
         activeOpacity={0.85}
       >
-        <Text style={styles.fabText}>+</Text>
+        <Feather name="plus" size={28} color="#fff" />
       </TouchableOpacity>
     </SafeAreaView>
   );
@@ -282,14 +288,12 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     paddingVertical: 20,
   },
-  dragHandleIcon: { fontSize: 22, color: '#C4C9D4', lineHeight: 26 },
-  dragHandleIconActive: { color: COLORS.primary },
 
   card: {
     flex: 1,
     backgroundColor: COLORS.card,
     borderRadius: 12,
-    padding: 14,
+    padding: 16,
     flexDirection: 'row',
     alignItems: 'center',
     gap: 10,
@@ -305,23 +309,21 @@ const styles = StyleSheet.create({
     shadowRadius: 12,
   },
 
-  cardLeft: { flex: 1, flexDirection: 'row', alignItems: 'center', gap: 10 },
+  cardLeft: { flex: 1, flexDirection: 'row', alignItems: 'center', gap: 12 },
   typeBadge: {
-    width: 40,
-    height: 40,
-    borderRadius: 8,
+    width: 46,
+    height: 46,
+    borderRadius: 10,
     backgroundColor: '#D8F3DC',
     alignItems: 'center',
     justifyContent: 'center',
   },
-  typeBadgeText: { fontSize: 13, fontWeight: '700', color: COLORS.primary },
   cardInfo: { flex: 1 },
-  cardLabel: { fontSize: 14, fontWeight: '600', color: COLORS.text },
-  cardDefault: { fontSize: 12, color: COLORS.muted, marginTop: 2 },
+  cardLabel: { fontSize: 16, fontWeight: '600', color: COLORS.text },
+  cardDefault: { fontSize: 13, color: COLORS.muted, marginTop: 3 },
 
   cardActions: { flexDirection: 'row', alignItems: 'center', gap: 4 },
-  actionBtn: { padding: 6 },
-  actionBtnText: { fontSize: 18 },
+  actionBtn: { padding: 10 },
 
   floatingRow: {
     position: 'absolute',
@@ -339,10 +341,9 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: '#95D5B2',
     paddingHorizontal: 16,
-    paddingVertical: 14,
+    paddingVertical: 18,
   },
-  bannerText: { fontSize: 15, fontWeight: '600', color: COLORS.primary },
-  bannerArrow: { fontSize: 22, color: COLORS.primary, fontWeight: '300' },
+  bannerText: { fontSize: 17, fontWeight: '600', color: COLORS.primary },
 
   fab: {
     position: 'absolute',
@@ -359,5 +360,4 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.4,
     shadowRadius: 8,
   },
-  fabText: { color: COLORS.white, fontSize: 32, lineHeight: 36 },
 });

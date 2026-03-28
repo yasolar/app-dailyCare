@@ -10,6 +10,7 @@ import {
   Platform,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { Feather } from '@expo/vector-icons';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { DailyReportStackParamList } from '../../App';
 
@@ -40,7 +41,7 @@ export default function ReportViewScreen({ route, navigation }: Props) {
       <View style={styles.header}>
         <Text style={styles.title}>Relatório do dia</Text>
         <TouchableOpacity onPress={() => navigation.goBack()} style={styles.closeBtn}>
-          <Text style={styles.closeBtnText}>✕</Text>
+          <Feather name="x" size={22} color={COLORS.muted} />
         </TouchableOpacity>
       </View>
 
@@ -52,7 +53,8 @@ export default function ReportViewScreen({ route, navigation }: Props) {
 
       <View style={styles.footer}>
         <TouchableOpacity style={styles.shareBtn} onPress={shareViaWhatsApp} activeOpacity={0.85}>
-          <Text style={styles.shareBtnText}>📤 Compartilhar / WhatsApp</Text>
+          <Feather name="share-2" size={20} color="#fff" style={{ marginRight: 10 }} />
+          <Text style={styles.shareBtnText}>Compartilhar / WhatsApp</Text>
         </TouchableOpacity>
       </View>
     </SafeAreaView>
@@ -71,7 +73,6 @@ const styles = StyleSheet.create({
   },
   title: { fontSize: 18, fontWeight: '700', color: COLORS.text },
   closeBtn: { padding: 6 },
-  closeBtnText: { fontSize: 20, color: COLORS.muted },
   scroll: { flex: 1 },
   scrollContent: { padding: 20 },
   reportText: {
@@ -90,7 +91,9 @@ const styles = StyleSheet.create({
     backgroundColor: '#25D366',
     borderRadius: 14,
     paddingVertical: 16,
+    flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'center',
   },
   shareBtnText: { color: COLORS.white, fontSize: 17, fontWeight: '700' },
 });

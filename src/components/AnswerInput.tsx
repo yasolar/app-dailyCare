@@ -7,6 +7,7 @@ import {
   Modal,
   StyleSheet,
 } from 'react-native';
+import { Feather } from '@expo/vector-icons';
 import { AnswerType } from '../types';
 
 interface Props {
@@ -37,14 +38,16 @@ function SimNaoInput({ value, onChange }: { value: string; onChange: (v: string)
         onPress={() => onChange(value === 'Sim' ? '' : 'Sim')}
         activeOpacity={0.8}
       >
-        <Text style={[styles.simNaoText, value === 'Sim' && styles.simNaoTextActive]}>✓ Sim</Text>
+        <Feather name="check" size={18} color={value === 'Sim' ? '#fff' : COLORS.muted} />
+        <Text style={[styles.simNaoText, value === 'Sim' && styles.simNaoTextActive]}>Sim</Text>
       </TouchableOpacity>
       <TouchableOpacity
         style={[styles.simNaoBtn, value === 'Não' && { backgroundColor: COLORS.nao, borderColor: COLORS.nao }]}
         onPress={() => onChange(value === 'Não' ? '' : 'Não')}
         activeOpacity={0.8}
       >
-        <Text style={[styles.simNaoText, value === 'Não' && styles.simNaoTextActive]}>✗ Não</Text>
+        <Feather name="x" size={18} color={value === 'Não' ? '#fff' : COLORS.muted} />
+        <Text style={[styles.simNaoText, value === 'Não' && styles.simNaoTextActive]}>Não</Text>
       </TouchableOpacity>
     </View>
   );
@@ -135,22 +138,22 @@ function TimePicker({
               <View style={styles.timeColumn}>
                 <Text style={styles.timeColLabel}>Hora</Text>
                 <TouchableOpacity onPress={() => setTempH((tempH + 1) % 24)} style={styles.timeArrow}>
-                  <Text style={styles.timeArrowText}>▲</Text>
+                  <Feather name="chevron-up" size={28} color={COLORS.primary} />
                 </TouchableOpacity>
                 <Text style={styles.timeValue}>{String(tempH).padStart(2, '0')}</Text>
                 <TouchableOpacity onPress={() => setTempH((tempH + 23) % 24)} style={styles.timeArrow}>
-                  <Text style={styles.timeArrowText}>▼</Text>
+                  <Feather name="chevron-down" size={28} color={COLORS.primary} />
                 </TouchableOpacity>
               </View>
               <Text style={styles.timeSep}>:</Text>
               <View style={styles.timeColumn}>
                 <Text style={styles.timeColLabel}>Min</Text>
                 <TouchableOpacity onPress={() => setTempM((tempM + 1) % 60)} style={styles.timeArrow}>
-                  <Text style={styles.timeArrowText}>▲</Text>
+                  <Feather name="chevron-up" size={28} color={COLORS.primary} />
                 </TouchableOpacity>
                 <Text style={styles.timeValue}>{String(tempM).padStart(2, '0')}</Text>
                 <TouchableOpacity onPress={() => setTempM((tempM - 1 + 60) % 60)} style={styles.timeArrow}>
-                  <Text style={styles.timeArrowText}>▼</Text>
+                  <Feather name="chevron-down" size={28} color={COLORS.primary} />
                 </TouchableOpacity>
               </View>
             </View>
@@ -221,9 +224,10 @@ function SelecaoAlimentosInput({ value, onChange, alimentos }: { value: string; 
               onPress={() => toggle(item)}
               activeOpacity={0.7}
             >
-              <Text style={[styles.alimentoChipText, isSelected && styles.alimentoChipTextSelected]}>
-                {isSelected ? '✓ ' : ''}{item}
-              </Text>
+              <View style={{ flexDirection: 'row', alignItems: 'center', gap: 5 }}>
+                {isSelected && <Feather name="check" size={14} color={COLORS.primary} />}
+                <Text style={[styles.alimentoChipText, isSelected && styles.alimentoChipTextSelected]}>{item}</Text>
+              </View>
             </TouchableOpacity>
           );
         })}
@@ -278,37 +282,40 @@ export default function AnswerInput({ type, value, onChange, options = [] }: Pro
 
 const styles = StyleSheet.create({
   // Sim/Não
-  simNaoRow: { flexDirection: 'row', gap: 10 },
+  simNaoRow: { flexDirection: 'row', gap: 12 },
   simNaoBtn: {
     flex: 1,
-    paddingVertical: 14,
-    borderRadius: 10,
+    paddingVertical: 18,
+    borderRadius: 12,
     borderWidth: 2,
     borderColor: COLORS.border,
+    flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'center',
+    gap: 8,
     backgroundColor: COLORS.white,
   },
-  simNaoText: { fontSize: 16, fontWeight: '600', color: COLORS.muted },
+  simNaoText: { fontSize: 18, fontWeight: '600', color: COLORS.muted },
   simNaoTextActive: { color: COLORS.white },
 
   // Número
   numRow: { flexDirection: 'row', alignItems: 'center', gap: 12 },
   numBtn: {
-    width: 48,
-    height: 48,
-    borderRadius: 24,
+    width: 56,
+    height: 56,
+    borderRadius: 28,
     backgroundColor: COLORS.primary,
     alignItems: 'center',
     justifyContent: 'center',
   },
-  numBtnText: { color: COLORS.white, fontSize: 24, fontWeight: '700', lineHeight: 28 },
+  numBtnText: { color: COLORS.white, fontSize: 28, fontWeight: '700', lineHeight: 32 },
   numInput: {
     flex: 1,
-    height: 48,
+    height: 56,
     borderWidth: 1,
     borderColor: COLORS.border,
     borderRadius: 10,
-    fontSize: 22,
+    fontSize: 24,
     fontWeight: '700',
     color: COLORS.text,
     backgroundColor: COLORS.bg,
@@ -319,15 +326,15 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: COLORS.border,
     borderRadius: 10,
-    paddingVertical: 12,
+    paddingVertical: 16,
     paddingHorizontal: 16,
     backgroundColor: COLORS.bg,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
   },
-  timeTriggerLabel: { fontSize: 13, color: COLORS.muted, marginRight: 8 },
-  timeTriggerValue: { fontSize: 20, fontWeight: '700', color: COLORS.text },
+  timeTriggerLabel: { fontSize: 15, color: COLORS.muted, marginRight: 8 },
+  timeTriggerValue: { fontSize: 22, fontWeight: '700', color: COLORS.text },
 
   // Modal
   modalOverlay: {
@@ -339,36 +346,35 @@ const styles = StyleSheet.create({
   modalBox: {
     backgroundColor: COLORS.white,
     borderRadius: 20,
-    padding: 24,
-    width: 280,
+    padding: 28,
+    width: 300,
     alignItems: 'center',
   },
-  modalTitle: { fontSize: 18, fontWeight: '700', color: COLORS.text, marginBottom: 20 },
+  modalTitle: { fontSize: 20, fontWeight: '700', color: COLORS.text, marginBottom: 24 },
   timePickerRow: { flexDirection: 'row', alignItems: 'center', gap: 8 },
   timeColumn: { alignItems: 'center', gap: 4 },
-  timeColLabel: { fontSize: 12, color: COLORS.muted, marginBottom: 4 },
-  timeArrow: { padding: 10 },
-  timeArrowText: { fontSize: 22, color: COLORS.primary },
-  timeValue: { fontSize: 36, fontWeight: '700', color: COLORS.text, minWidth: 60, textAlign: 'center' },
-  timeSep: { fontSize: 36, fontWeight: '700', color: COLORS.text, marginTop: 20 },
-  modalActions: { flexDirection: 'row', gap: 12, marginTop: 24 },
+  timeColLabel: { fontSize: 14, color: COLORS.muted, marginBottom: 4 },
+  timeArrow: { padding: 14 },
+  timeValue: { fontSize: 40, fontWeight: '700', color: COLORS.text, minWidth: 66, textAlign: 'center' },
+  timeSep: { fontSize: 40, fontWeight: '700', color: COLORS.text, marginTop: 24 },
+  modalActions: { flexDirection: 'row', gap: 12, marginTop: 28 },
   modalCancel: {
     flex: 1,
-    paddingVertical: 12,
+    paddingVertical: 16,
     borderRadius: 10,
     borderWidth: 1,
     borderColor: COLORS.border,
     alignItems: 'center',
   },
-  modalCancelText: { color: COLORS.muted, fontWeight: '600' },
+  modalCancelText: { color: COLORS.muted, fontWeight: '600', fontSize: 16 },
   modalConfirm: {
     flex: 1,
-    paddingVertical: 12,
+    paddingVertical: 16,
     borderRadius: 10,
     backgroundColor: COLORS.primary,
     alignItems: 'center',
   },
-  modalConfirmText: { color: COLORS.white, fontWeight: '700' },
+  modalConfirmText: { color: COLORS.white, fontWeight: '700', fontSize: 16 },
 
   // Intervalo
   intervalRow: { flexDirection: 'row', alignItems: 'center', gap: 8 },
@@ -377,11 +383,11 @@ const styles = StyleSheet.create({
 
   // Seleção de Alimentos
   alimentosContainer: { gap: 10 },
-  alimentosGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: 8 },
+  alimentosGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: 10 },
   alimentoChip: {
-    paddingVertical: 8,
-    paddingHorizontal: 14,
-    borderRadius: 20,
+    paddingVertical: 12,
+    paddingHorizontal: 18,
+    borderRadius: 22,
     borderWidth: 2,
     borderColor: COLORS.border,
     backgroundColor: COLORS.white,
@@ -390,10 +396,10 @@ const styles = StyleSheet.create({
     borderColor: COLORS.primary,
     backgroundColor: '#D8F3DC',
   },
-  alimentoChipText: { fontSize: 14, fontWeight: '600', color: COLORS.muted },
+  alimentoChipText: { fontSize: 16, fontWeight: '600', color: COLORS.muted },
   alimentoChipTextSelected: { color: COLORS.primary },
   alimentosSummary: {
-    fontSize: 13,
+    fontSize: 14,
     color: COLORS.muted,
     fontStyle: 'italic',
     marginTop: 4,
@@ -405,13 +411,13 @@ const styles = StyleSheet.create({
     borderColor: COLORS.border,
     borderRadius: 10,
     paddingHorizontal: 14,
-    paddingVertical: 10,
-    fontSize: 15,
+    paddingVertical: 14,
+    fontSize: 17,
     color: COLORS.text,
     backgroundColor: COLORS.bg,
   },
   textInputLong: {
-    minHeight: 80,
-    paddingTop: 10,
+    minHeight: 96,
+    paddingTop: 12,
   },
 });

@@ -3,7 +3,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { StatusBar } from 'expo-status-bar';
-import { Text } from 'react-native';
+import { Feather } from '@expo/vector-icons';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
@@ -95,12 +95,12 @@ function MainTabs() {
       <Tab.Screen
         name="Relatório"
         component={DailyReportStack}
-        options={{ tabBarIcon: ({ color }) => <Text style={{ fontSize: 20, color }}>📋</Text> }}
+        options={{ tabBarIcon: ({ color, size }) => <Feather name="clipboard" size={size} color={color} /> }}
       />
       <Tab.Screen
         name="Perguntas"
         component={QuestionsStack}
-        options={{ tabBarIcon: ({ color }) => <Text style={{ fontSize: 20, color }}>⚙️</Text> }}
+        options={{ tabBarIcon: ({ color, size }) => <Feather name="settings" size={size} color={color} /> }}
       />
     </Tab.Navigator>
   );
@@ -125,7 +125,7 @@ export default function App() {
     <SafeAreaProvider>
     <NavigationContainer>
       <StatusBar style="light" />
-      <RootStack.Navigator screenOptions={{ headerShown: false }}>
+      <RootStack.Navigator screenOptions={{ headerShown: false }} initialRouteName="Main">
         <RootStack.Screen name="Welcome" component={WelcomeScreen} />
         <RootStack.Screen name="Main" component={MainTabs} />
       </RootStack.Navigator>

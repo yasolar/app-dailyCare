@@ -179,25 +179,25 @@ const styles = StyleSheet.create({
   safe: { flex: 1, backgroundColor: COLORS.bg },
   container: { padding: 20, gap: 12, paddingBottom: 40 },
 
-  sectionTitle: { fontSize: 15, fontWeight: '700', color: COLORS.text, marginTop: 8 },
-  hint: { fontSize: 13, color: COLORS.muted, marginTop: -8 },
+  sectionTitle: { fontSize: 17, fontWeight: '700', color: COLORS.text, marginTop: 8 },
+  hint: { fontSize: 14, color: COLORS.muted, marginTop: -8 },
 
   input: {
     borderWidth: 1,
     borderColor: COLORS.border,
     borderRadius: 10,
-    paddingHorizontal: 14,
-    paddingVertical: 12,
-    fontSize: 15,
+    paddingHorizontal: 16,
+    paddingVertical: 14,
+    fontSize: 17,
     color: COLORS.text,
     backgroundColor: COLORS.white,
-    minHeight: 48,
+    minHeight: 54,
   },
 
   typesGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: 10 },
   typeOption: {
-    paddingVertical: 10,
-    paddingHorizontal: 16,
+    paddingVertical: 14,
+    paddingHorizontal: 18,
     borderRadius: 10,
     borderWidth: 2,
     borderColor: COLORS.border,
@@ -207,15 +207,15 @@ const styles = StyleSheet.create({
     borderColor: COLORS.selectedBorder,
     backgroundColor: COLORS.selected,
   },
-  typeOptionText: { fontSize: 14, fontWeight: '600', color: COLORS.muted },
+  typeOptionText: { fontSize: 15, fontWeight: '600', color: COLORS.muted },
   typeOptionTextSelected: { color: COLORS.primary },
 
   saveBtn: {
     backgroundColor: COLORS.primary,
     borderRadius: 12,
-    paddingVertical: 16,
+    paddingVertical: 20,
     alignItems: 'center',
     marginTop: 16,
   },
-  saveBtnText: { color: COLORS.white, fontSize: 17, fontWeight: '700' },
+  saveBtnText: { color: COLORS.white, fontSize: 18, fontWeight: '700' },
 });
