@@ -1,12 +1,14 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useRef, useState } from 'react';
 import {
   View,
   Text,
-  ScrollView,
   TouchableOpacity,
   StyleSheet,
   TextInput,
   Alert,
+  Animated,
+  Dimensions,
+  ScrollView,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Feather } from '@expo/vector-icons';
@@ -18,6 +20,8 @@ import { loadQuestions, loadSettings, saveSettings, loadListasOpcoes } from '../
 import AnswerInput from '../components/AnswerInput';
 
 type Props = NativeStackScreenProps<DailyReportStackParamList, 'DailyReportForm'>;
+
+const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
 const C = {
   primary: '#2D6A4F',
@@ -64,6 +68,9 @@ export default function DailyReportScreen({ navigation }: Props) {
   const [tempDate, setTempDate] = useState('');
   const [editingName, setEditingName] = useState(false);
   const [tempName, setTempName] = useState('');
+  const [currentIndex, setCurrentIndex] = useState(0);
+
+  const slideAnim = useRef(new Animated.Value(0)).current;
 
   useFocusEffect(
     useCallback(() => {
@@ -76,6 +83,8 @@ export default function DailyReportScreen({ navigation }: Props) {
           if (q.defaultAnswer) defaults[q.id] = q.defaultAnswer;
         });
         setAnswers((prev) => ({ ...defaults, ...prev }));
+        setCurrentIndex(0);
+        slideAnim.setValue(0);
       });
     }, [])
   );
@@ -109,6 +118,40 @@ export default function DailyReportScreen({ navigation }: Props) {
     navigation.navigate('ReportView', { reportText: text });
   };
 
+  const goNext = () => {
+    if (currentIndex >= questions.length - 1) return;
+    Animated.timing(slideAnim, {
+      toValue: -SCREEN_WIDTH,
+      duration: 280,
+      useNativeDriver: true,
+    }).start(() => {
+      setCurrentIndex((i) => i + 1);
+      slideAnim.setValue(SCREEN_WIDTH);
+      Animated.timing(slideAnim, {
+        toValue: 0,
+        duration: 280,
+        useNativeDriver: true,
+      }).start();
+    });
+  };
+
+  const goBack = () => {
+    if (currentIndex <= 0) return;
+    Animated.timing(slideAnim, {
+      toValue: SCREEN_WIDTH,
+      duration: 280,
+      useNativeDriver: true,
+    }).start(() => {
+      setCurrentIndex((i) => i - 1);
+      slideAnim.setValue(-SCREEN_WIDTH);
+      Animated.timing(slideAnim, {
+        toValue: 0,
+        duration: 280,
+        useNativeDriver: true,
+      }).start();
+    });
+  };
+
   const clearForm = () => {
     Alert.alert('Limpar formulário', 'Deseja apagar todas as respostas de hoje?', [
       { text: 'Cancelar', style: 'cancel' },
@@ -121,22 +164,23 @@ export default function DailyReportScreen({ navigation }: Props) {
             if (q.defaultAnswer) defaults[q.id] = q.defaultAnswer;
           });
           setAnswers(defaults);
+          setCurrentIndex(0);
+          slideAnim.setValue(0);
         },
       },
     ]);
   };
 
-  const answeredCount = questions.filter((q) => (answers[q.id] ?? '').trim() !== '').length;
+  const isLast = currentIndex === questions.length - 1;
+  const currentQuestion = questions[currentIndex];
 
   return (
     <SafeAreaView style={styles.safe} edges={['top']}>
       {/* ── Green header ── */}
       <View style={styles.hero}>
-        {/* Decorative circles */}
         <View style={styles.decorCircleLarge} />
         <View style={styles.decorCircleSmall} />
 
-        {/* Top row: logo + app name */}
         <View style={styles.heroTop}>
           <Logo />
           <View style={styles.heroTitles}>
@@ -214,88 +258,124 @@ export default function DailyReportScreen({ navigation }: Props) {
         </View>
       </View>
 
-      {/* ── White content area ── */}
+      {/* ── Content area ── */}
       <View style={styles.contentArea}>
-        <ScrollView
-          contentContainerStyle={styles.scroll}
-          keyboardShouldPersistTaps="handled"
-          showsVerticalScrollIndicator={false}
-        >
-          {/* Progress row */}
-          {questions.length > 0 && (
-            <>
-              <View style={styles.progressRow}>
-                <View>
-                  <Text style={styles.progressLabel}>Progresso</Text>
-                  <Text style={styles.progressCount}>
-                    {answeredCount} / {questions.length}
-                  </Text>
-                </View>
-                <TouchableOpacity onPress={clearForm} style={styles.clearBtn}>
-                  <Text style={styles.clearText}>Limpar</Text>
-                </TouchableOpacity>
-              </View>
 
-              {/* Progress bar */}
-              <View style={styles.progressBarBg}>
-                <View
-                  style={[
-                    styles.progressBarFill,
-                    { width: questions.length > 0 ? `${(answeredCount / questions.length) * 100}%` : '0%' },
-                  ]}
-                />
-              </View>
-            </>
-          )}
-
-          {/* Questions */}
-          {questions.map((q) => (
-            <View key={q.id} style={styles.questionCard}>
-              <Text style={styles.questionLabel}>{q.label}</Text>
-              <View style={styles.answerArea}>
-                <AnswerInput
-                  type={q.answerType}
-                  value={answers[q.id] ?? ''}
-                  onChange={(v) => setAnswer(q.id, v)}
-                  options={listas.find(l => l.id === q.optionsListId)?.items ?? []}
-                />
-              </View>
+        {/* Empty state */}
+        {questions.length === 0 && (
+          <View style={styles.emptyState}>
+            <View style={styles.emptyIcon}>
+              <Feather name="clipboard" size={52} color={C.border} />
             </View>
-          ))}
-
-          {/* Empty state */}
-          {questions.length === 0 && (
-            <View style={styles.emptyState}>
-              <View style={styles.emptyIcon}>
-                <Feather name="clipboard" size={52} color={C.border} />
-              </View>
-              <Text style={styles.emptyTitle}>Nenhuma pergunta cadastrada</Text>
-              <Text style={styles.emptyText}>
-                Adicione as perguntas do relatório diário para começar.
-              </Text>
-              <TouchableOpacity
-                style={styles.emptyBtn}
-                onPress={() => tabNavigation.navigate('Cadastro')}
-                activeOpacity={0.85}
-              >
-                <Feather name="plus" size={18} color={C.white} style={{ marginRight: 8 }} />
-              <Text style={styles.emptyBtnText}>Cadastrar perguntas</Text>
-              </TouchableOpacity>
-            </View>
-          )}
-
-          {/* Generate button */}
-          {questions.length > 0 && (
+            <Text style={styles.emptyTitle}>Nenhuma pergunta cadastrada</Text>
+            <Text style={styles.emptyText}>
+              Adicione as perguntas do relatório diário para começar.
+            </Text>
             <TouchableOpacity
-              style={styles.generateBtn}
-              onPress={handleGenerateAndShare}
+              style={styles.emptyBtn}
+              onPress={() => tabNavigation.navigate('Cadastro')}
               activeOpacity={0.85}
             >
-              <Feather name="send" size={20} color={C.white} style={{ marginRight: 10 }} />
-              <Text style={styles.generateBtnText}>Gerar Relatório</Text>
+              <Feather name="plus" size={18} color={C.white} style={{ marginRight: 8 }} />
+              <Text style={styles.emptyBtnText}>Cadastrar perguntas</Text>
             </TouchableOpacity>
-          )}
-        </ScrollView>
+          </View>
+        )}
+
+        {/* Card flow */}
+        {questions.length > 0 && currentQuestion && (
+          <View style={styles.cardFlow}>
+            {/* Progress */}
+            <View style={styles.progressRow}>
+              <View>
+                <Text style={styles.progressLabel}>Pergunta</Text>
+                <Text style={styles.progressCount}>
+                  {currentIndex + 1} / {questions.length}
+                </Text>
+              </View>
+              <TouchableOpacity onPress={clearForm} style={styles.clearBtn}>
+                <Text style={styles.clearText}>Limpar</Text>
+              </TouchableOpacity>
+            </View>
+
+            <View style={styles.progressBarBg}>
+              <View
+                style={[
+                  styles.progressBarFill,
+                  { width: `${((currentIndex + 1) / questions.length) * 100}%` },
+                ]}
+              />
+            </View>
+
+            {/* Dot indicators */}
+            <View style={styles.dotsRow}>
+              {questions.map((_, i) => (
+                <View
+                  key={i}
+                  style={[
+                    styles.dot,
+                    i === currentIndex && styles.dotActive,
+                    (answers[questions[i].id] ?? '').trim() !== '' && i !== currentIndex && styles.dotAnswered,
+                  ]}
+                />
+              ))}
+            </View>
+
+            {/* Animated card */}
+            <Animated.View style={[styles.cardWrapper, { transform: [{ translateX: slideAnim }] }]}>
+              <ScrollView
+                contentContainerStyle={styles.cardScroll}
+                keyboardShouldPersistTaps="handled"
+                showsVerticalScrollIndicator={false}
+              >
+                <View style={styles.questionCard}>
+                  <Text style={styles.questionLabel}>{currentQuestion.label}</Text>
+                  <View style={styles.answerArea}>
+                    <AnswerInput
+                      type={currentQuestion.answerType}
+                      value={answers[currentQuestion.id] ?? ''}
+                      onChange={(v) => setAnswer(currentQuestion.id, v)}
+                      options={listas.find(l => l.id === currentQuestion.optionsListId)?.items ?? []}
+                    />
+                  </View>
+                </View>
+              </ScrollView>
+            </Animated.View>
+
+            {/* Navigation buttons */}
+            <View style={styles.navRow}>
+              <TouchableOpacity
+                style={[styles.backBtn, currentIndex === 0 && styles.backBtnDisabled]}
+                onPress={goBack}
+                activeOpacity={0.7}
+                disabled={currentIndex === 0}
+              >
+                <Feather name="arrow-left" size={20} color={currentIndex === 0 ? C.muted : C.primary} />
+                <Text style={[styles.backBtnText, currentIndex === 0 && { color: C.muted }]}>Voltar</Text>
+              </TouchableOpacity>
+
+              {isLast ? (
+                <TouchableOpacity
+                  style={styles.generateBtn}
+                  onPress={handleGenerateAndShare}
+                  activeOpacity={0.85}
+                >
+                  <Feather name="send" size={18} color={C.white} style={{ marginRight: 8 }} />
+                  <Text style={styles.generateBtnText}>Gerar Relatório</Text>
+                </TouchableOpacity>
+              ) : (
+                <TouchableOpacity
+                  style={styles.nextBtn}
+                  onPress={goNext}
+                  activeOpacity={0.85}
+                >
+                  <Text style={styles.nextBtnText}>Prosseguir</Text>
+                  <Feather name="arrow-right" size={20} color={C.white} style={{ marginLeft: 6 }} />
+                </TouchableOpacity>
+              )}
+            </View>
+          </View>
+        )}
       </View>
     </SafeAreaView>
   );
@@ -304,7 +384,7 @@ export default function DailyReportScreen({ navigation }: Props) {
 const styles = StyleSheet.create({
   safe: { flex: 1, backgroundColor: C.primary },
 
-  // ── Hero (green header) ──
+  // ── Hero ──
   hero: {
     backgroundColor: C.primary,
     paddingHorizontal: 20,
@@ -330,7 +410,6 @@ const styles = StyleSheet.create({
     bottom: -30,
     left: -20,
   },
-
   heroTop: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -354,7 +433,6 @@ const styles = StyleSheet.create({
     backgroundColor: C.green,
     alignItems: 'center',
     justifyContent: 'center',
-    position: 'relative',
   },
   heroTitles: { flex: 1 },
   heroSuper: {
@@ -363,7 +441,6 @@ const styles = StyleSheet.create({
     color: C.white,
     letterSpacing: 1.5,
   },
-
   heroField: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -396,7 +473,7 @@ const styles = StyleSheet.create({
   },
   heroFieldBtnText: { color: C.white, fontWeight: '700', fontSize: 15 },
 
-  // ── White content ──
+  // ── Content ──
   contentArea: {
     flex: 1,
     backgroundColor: C.bg,
@@ -404,9 +481,14 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 28,
     overflow: 'hidden',
   },
-  scroll: { padding: 20, gap: 14, paddingBottom: 40 },
 
-  // Progress
+  // ── Card flow ──
+  cardFlow: {
+    flex: 1,
+    paddingHorizontal: 20,
+    paddingTop: 20,
+    paddingBottom: 16,
+  },
   progressRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -417,12 +499,11 @@ const styles = StyleSheet.create({
   progressCount: { fontSize: 22, fontWeight: '800', color: C.primary },
   clearBtn: { paddingVertical: 8, paddingHorizontal: 4 },
   clearText: { fontSize: 15, color: '#EF4444', fontWeight: '600' },
-
   progressBarBg: {
     height: 6,
     backgroundColor: C.border,
     borderRadius: 3,
-    marginBottom: 6,
+    marginBottom: 12,
     overflow: 'hidden',
   },
   progressBarFill: {
@@ -431,22 +512,121 @@ const styles = StyleSheet.create({
     borderRadius: 3,
   },
 
-  // Question cards
+  dotsRow: {
+    flexDirection: 'row',
+    gap: 6,
+    marginBottom: 16,
+    flexWrap: 'wrap',
+  },
+  dot: {
+    width: 8,
+    height: 8,
+    borderRadius: 4,
+    backgroundColor: C.border,
+  },
+  dotActive: {
+    backgroundColor: C.primary,
+    width: 20,
+    borderRadius: 4,
+  },
+  dotAnswered: {
+    backgroundColor: C.green,
+  },
+
+  cardWrapper: {
+    flex: 1,
+  },
+  cardScroll: {
+    flexGrow: 1,
+  },
   questionCard: {
     backgroundColor: C.card,
-    borderRadius: 16,
-    padding: 20,
-    gap: 14,
-    elevation: 1,
-    shadowColor: '#000',
-    shadowOpacity: 0.05,
-    shadowRadius: 3,
+    borderRadius: 20,
+    padding: 24,
+    gap: 16,
   },
-  questionLabel: { fontSize: 17, fontWeight: '600', color: C.text, lineHeight: 24 },
+  questionLabel: {
+    fontSize: 19,
+    fontWeight: '700',
+    color: C.text,
+    lineHeight: 26,
+  },
   answerArea: {},
 
-  // Empty state
-  emptyState: { alignItems: 'center', paddingVertical: 32, gap: 10 },
+  // ── Nav buttons ──
+  navRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginTop: 16,
+    gap: 12,
+  },
+  backBtn: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+    paddingVertical: 14,
+    paddingHorizontal: 18,
+    borderRadius: 14,
+    borderWidth: 1.5,
+    borderColor: C.border,
+    backgroundColor: C.white,
+  },
+  backBtnDisabled: {
+    borderColor: C.border,
+    backgroundColor: '#f9fafb',
+  },
+  backBtnText: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: C.primary,
+  },
+  nextBtn: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: C.primary,
+    borderRadius: 14,
+    paddingVertical: 16,
+    gap: 6,
+    elevation: 2,
+    shadowColor: C.primary,
+    shadowOpacity: 0.3,
+    shadowRadius: 6,
+  },
+  nextBtnText: {
+    color: C.white,
+    fontSize: 17,
+    fontWeight: '700',
+  },
+  generateBtn: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: C.green,
+    borderRadius: 14,
+    paddingVertical: 16,
+    elevation: 3,
+    shadowColor: C.green,
+    shadowOpacity: 0.35,
+    shadowRadius: 8,
+  },
+  generateBtnText: {
+    color: C.white,
+    fontSize: 17,
+    fontWeight: '700',
+  },
+
+  // ── Empty state ──
+  emptyState: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 32,
+    gap: 10,
+  },
   emptyIcon: { marginBottom: 4 },
   emptyTitle: { fontSize: 20, fontWeight: '700', color: C.text, textAlign: 'center' },
   emptyText: { fontSize: 15, color: C.muted, textAlign: 'center', lineHeight: 22, paddingHorizontal: 16 },
@@ -464,20 +644,4 @@ const styles = StyleSheet.create({
     shadowRadius: 8,
   },
   emptyBtnText: { color: C.white, fontSize: 17, fontWeight: '700' },
-
-  // Generate button
-  generateBtn: {
-    backgroundColor: C.green,
-    borderRadius: 14,
-    paddingVertical: 22,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginTop: 8,
-    elevation: 3,
-    shadowColor: C.green,
-    shadowOpacity: 0.35,
-    shadowRadius: 8,
-  },
-  generateBtnText: { color: C.white, fontSize: 20, fontWeight: '700' },
 });
