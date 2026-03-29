@@ -75,15 +75,7 @@ export default function ListasOpcoesScreen() {
               <Text style={styles.cardName}>{item.name}</Text>
               <Text style={styles.cardCount}>{item.items.length} item{item.items.length !== 1 ? 's' : ''}</Text>
             </View>
-            <View style={styles.cardActions}>
-              <TouchableOpacity
-                onPress={() => deletarLista(item.id, item.name)}
-                style={styles.deleteBtn}
-              >
-                <Feather name="trash-2" size={20} color={COLORS.danger} />
-              </TouchableOpacity>
-              <Feather name="chevron-right" size={24} color={COLORS.muted} />
-            </View>
+            <Feather name="chevron-right" size={24} color={COLORS.muted} />
           </TouchableOpacity>
         )}
       />

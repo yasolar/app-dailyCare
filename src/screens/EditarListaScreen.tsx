@@ -6,7 +6,7 @@ import {
   TouchableOpacity,
   TextInput,
   StyleSheet,
-  Alert,
+  Modal,
   KeyboardAvoidingView,
   Platform,
 } from 'react-native';
@@ -41,12 +41,17 @@ export default function EditarListaScreen() {
   const [items, setItems] = useState<string[]>(existing?.items ?? []);
   const [novoItem, setNovoItem] = useState('');
   const [saving, setSaving] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+
+  const confirmDeletar = async () => {
+    if (!existing) return;
+    const listas = await loadListasOpcoes();
+    await saveListasOpcoes(listas.filter((l) => l.id !== existing.id));
+    navigation.goBack();
+  };
 
   const salvar = async () => {
-    if (!nome.trim()) {
-      Alert.alert('Atenção', 'Digite um nome para a lista.');
-      return;
-    }
+    if (!nome.trim()) return;
     setSaving(true);
     const listas = await loadListasOpcoes();
     if (existing) {
@@ -69,10 +74,7 @@ export default function EditarListaScreen() {
   const adicionarItem = () => {
     const item = novoItem.trim();
     if (!item) return;
-    if (items.some((i) => i.toLowerCase() === item.toLowerCase())) {
-      Alert.alert('Atenção', 'Este item já está na lista.');
-      return;
-    }
+    if (items.some((i) => i.toLowerCase() === item.toLowerCase())) return;
     setItems([...items, item]);
     setNovoItem('');
   };
@@ -139,6 +141,15 @@ export default function EditarListaScreen() {
         </View>
 
         <View style={styles.footer}>
+          {existing && (
+            <TouchableOpacity
+              style={styles.deleteBtn}
+              onPress={() => setShowDeleteModal(true)}
+              activeOpacity={0.85}
+            >
+              <Feather name="trash-2" size={18} color={COLORS.danger} />
+            </TouchableOpacity>
+          )}
           <TouchableOpacity
             style={[styles.saveBtn, saving && { opacity: 0.7 }]}
             onPress={salvar}
@@ -149,6 +160,37 @@ export default function EditarListaScreen() {
           </TouchableOpacity>
         </View>
       </KeyboardAvoidingView>
+
+      <Modal visible={showDeleteModal} transparent animationType="fade">
+        <View style={styles.modalOverlay}>
+          <View style={styles.modalBox}>
+            <View style={styles.modalIconWrap}>
+              <Feather name="trash-2" size={24} color={COLORS.primary} />
+            </View>
+            <Text style={styles.modalTitle}>Excluir lista</Text>
+            <Text style={styles.modalDesc}>
+              Deseja excluir a lista "{existing?.name}"? Esta ação não pode ser desfeita.
+            </Text>
+            <View style={styles.modalBtns}>
+              <TouchableOpacity
+                style={styles.modalCancelBtn}
+                onPress={() => setShowDeleteModal(false)}
+                activeOpacity={0.8}
+              >
+                <Text style={styles.modalCancelText}>Cancelar</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.modalConfirmBtn}
+                onPress={confirmDeletar}
+                activeOpacity={0.85}
+              >
+                <Text style={styles.modalConfirmText}>Excluir</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      </Modal>
+
     </SafeAreaView>
   );
 }
@@ -226,16 +268,102 @@ const styles = StyleSheet.create({
   addBtnDisabled: { opacity: 0.4 },
 
   footer: {
+    flexDirection: 'row',
+    gap: 10,
     padding: 16,
     backgroundColor: COLORS.white,
     borderTopWidth: 1,
     borderTopColor: COLORS.border,
   },
+  deleteBtn: {
+    width: 52,
+    borderRadius: 12,
+    borderWidth: 1.5,
+    borderColor: '#FECACA',
+    backgroundColor: '#FEF2F2',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   saveBtn: {
+    flex: 1,
     backgroundColor: COLORS.primary,
     borderRadius: 12,
     paddingVertical: 16,
     alignItems: 'center',
   },
   saveBtnText: { color: COLORS.white, fontSize: 17, fontWeight: '700' },
+
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: '#00000055',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingHorizontal: 32,
+  },
+  modalBox: {
+    backgroundColor: COLORS.white,
+    borderRadius: 24,
+    padding: 28,
+    width: '100%',
+    alignItems: 'center',
+    gap: 12,
+    elevation: 8,
+    shadowColor: '#000',
+    shadowOpacity: 0.15,
+    shadowRadius: 12,
+  },
+  modalIconWrap: {
+    width: 56,
+    height: 56,
+    borderRadius: 16,
+    backgroundColor: COLORS.bg,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 1.5,
+    borderColor: COLORS.border,
+    marginBottom: 4,
+  },
+  modalTitle: {
+    fontSize: 18,
+    fontWeight: '800',
+    color: COLORS.text,
+  },
+  modalDesc: {
+    fontSize: 14,
+    color: COLORS.muted,
+    textAlign: 'center',
+    lineHeight: 20,
+  },
+  modalBtns: {
+    flexDirection: 'row',
+    gap: 10,
+    marginTop: 8,
+    width: '100%',
+  },
+  modalCancelBtn: {
+    flex: 1,
+    paddingVertical: 14,
+    borderRadius: 14,
+    borderWidth: 1.5,
+    borderColor: COLORS.border,
+    alignItems: 'center',
+    backgroundColor: COLORS.white,
+  },
+  modalCancelText: {
+    fontSize: 15,
+    fontWeight: '600',
+    color: COLORS.primary,
+  },
+  modalConfirmBtn: {
+    flex: 1,
+    paddingVertical: 14,
+    borderRadius: 14,
+    alignItems: 'center',
+    backgroundColor: '#C0392B',
+  },
+  modalConfirmText: {
+    fontSize: 15,
+    fontWeight: '700',
+    color: COLORS.white,
+  },
 });
