@@ -1,14 +1,14 @@
 {
   "expo": {
-    "name": "app_dailyCare",
+    "name": "Daily Care",
     "slug": "app-daily-care",
     "version": "1.0.0",
     "sdkVersion": "54.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/dailyCareLogo.png",
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./assets/splash-icon.png",
+      "image": "./assets/dailyCareLogo.png",
       "resizeMode": "contain",
       "backgroundColor": "#2D6A4F"
     },
@@ -20,14 +20,14 @@
       "newArchEnabled": false,
       "adaptiveIcon": {
         "backgroundColor": "#2D6A4F",
-        "foregroundImage": "./assets/android-icon-foreground.png",
+        "foregroundImage": "./assets/dailyCareLogo.png",
         "backgroundImage": "./assets/android-icon-background.png",
         "monochromeImage": "./assets/android-icon-monochrome.png"
       },
       "predictiveBackGestureEnabled": false
     },
     "web": {
-      "favicon": "./assets/favicon.png"
+      "favicon": "./assets/dailyCareLogo.png"
     },
     "extra": {
       "eas": {
